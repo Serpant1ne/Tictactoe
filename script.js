@@ -4,8 +4,20 @@ let menuContainer = document.getElementById("menu")
 let moveCount = 0
 let cellsX = []
 let cellsY = []
+let scoreArray = [0,0]
+let scoreboard = []
 
-function checkWinCondition(id, cellsArray, player){
+function endGame(buttons, scoreArray, scoreboard){
+    buttons.forEach(button => {
+        button.disabled = true
+    })
+    scoreboard[0].innerHTML = scoreArray[0]
+    scoreboard[1].innerHTML = scoreArray[1]
+
+
+}
+
+function checkWinCondition(id, cellsArray, player, buttons, scoreArray, scoreboard){
     cellsArray.push(parseInt(id))
     cellsArray.sort()
     console.log(player + ":")
@@ -23,13 +35,22 @@ function checkWinCondition(id, cellsArray, player){
       winningCombinations.forEach(combination => {
         if (combination.every(elem => cellsArray.includes(elem))) {
             console.log("Player " + player + " won!");
+            if(player == "X"){
+                scoreArray[0]++
+            }
+            else{
+                scoreArray[1]++
+            }
+            
+            endGame(buttons, scoreArray, scoreboard)
+            
         }
     });
-
-    return cellsArray
+    console.log([cellsArray, scoreArray])
+    return [cellsArray, scoreArray]
 }
 
-function cellAction(button, moveCount, cellsX, cellsY){
+function cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard){
     // function
     moveCount++
     if(moveCount == 9){
@@ -37,21 +58,26 @@ function cellAction(button, moveCount, cellsX, cellsY){
     }
     if(moveCount % 2 != 0){
         button.innerHTML = "X"
-        cellsX = checkWinCondition(button.id, cellsX, "X")
+        let checkReturn = checkWinCondition(button.id, cellsX, "X", buttons, scoreArray, scoreboard)
+        cellsX = checkReturn[0]
+        scoreArray = checkReturn[1]
+        console.log(scoreArray)
         
     }
     else{
         button.innerHTML = "O"
-        cellsY = checkWinCondition(button.id, cellsY, "O")
+        let checkReturn = checkWinCondition(button.id, cellsY, "O", buttons, scoreArray, scoreboard)
+        cellsY = checkReturn[0]
+        scoreArray = checkReturn[1]
     }
     button.disabled = true
     console.log(moveCount)
 
     
-    return [moveCount,cellsX,cellsY]   
+    return [moveCount,cellsX,cellsY, scoreArray]   
 }
 
-function beginAction(buttons){
+function beginAction(buttons, beginButton){
     moveCount = 0
     cellsX = []
     cellsY = []
@@ -59,6 +85,7 @@ function beginAction(buttons){
         button.disabled = false;
         button.innerHTML = ''
     });
+    beginButton.innerHTML = "Restart"
 }
 
 // Creating grid 3x3
@@ -69,7 +96,7 @@ for(let i = 1; i <= 9; i++){
     button.innerHTML = gameNameLetters[i-1].toUpperCase();
     button.id = i
     button.addEventListener('click', function() { 
-        [moveCount,cellsX,cellsY] = cellAction(button, moveCount, cellsX, cellsY)
+        [moveCount,cellsX,cellsY, scoreArray] = cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard)
     })
 
     //styling
@@ -91,12 +118,22 @@ for(let i = 1; i <= 9; i++){
     gameContainer.appendChild(button)
 }
 
+//Creating scoreArray
+
+let XScore = document.getElementById("XScore")
+let OScore = document.getElementById("OScore")
+scoreboard = [XScore, OScore]
+
+XScore.innerHTML = scoreArray[0]
+OScore.innerHTML = scoreArray[1]
+
+
 
 
 let beginButton = document.createElement("button")
 beginButton.innerHTML = "Begin game";
 
-beginButton.addEventListener("click", () => { beginAction(buttons) })
+beginButton.addEventListener("click", () => { beginAction(buttons, beginButton) })
 
 menuContainer.appendChild(beginButton)
 
