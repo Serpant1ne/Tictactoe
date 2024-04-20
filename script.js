@@ -30,16 +30,19 @@ function checkWinCondition(id, cellsArray, player){
 }
 
 function cellAction(button, moveCount, cellsX, cellsY){
-    // function 
+    // function
+    moveCount++
+    if(moveCount == 9){
+        console.log("Draw")
+    }
     if(moveCount % 2 != 0){
         button.innerHTML = "X"
         cellsX = checkWinCondition(button.id, cellsX, "X")
-        moveCount++
+        
     }
     else{
         button.innerHTML = "O"
         cellsY = checkWinCondition(button.id, cellsY, "O")
-        moveCount++
     }
     button.disabled = true
     console.log(moveCount)
