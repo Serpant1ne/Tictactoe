@@ -135,6 +135,7 @@ OScore.innerHTML = scoreArray[1]
 
 let beginButton = document.createElement("button")
 beginButton.innerHTML = "Begin game";
+beginButton.classList.add("beginButton")
 
 beginButton.addEventListener("click", () => { beginAction(buttons, beginButton, moveText) })
 
