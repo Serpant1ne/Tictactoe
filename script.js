@@ -1,11 +1,13 @@
 let gameContainer = document.getElementById("game");
 let menuContainer = document.getElementById("menu")
+let moveText = document.getElementById("move")
 //declaring storage variables
 let moveCount = 0
 let cellsX = []
 let cellsY = []
 let scoreArray = [0,0]
 let scoreboard = []
+
 
 function endGame(buttons, scoreArray, scoreboard){
     buttons.forEach(button => {
@@ -50,7 +52,7 @@ function checkWinCondition(id, cellsArray, player, buttons, scoreArray, scoreboa
     return [cellsArray, scoreArray]
 }
 
-function cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard){
+function cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard, moveText){
     // function
     moveCount++
     if(moveCount == 9){
@@ -61,26 +63,27 @@ function cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard){
         let checkReturn = checkWinCondition(button.id, cellsX, "X", buttons, scoreArray, scoreboard)
         cellsX = checkReturn[0]
         scoreArray = checkReturn[1]
-        console.log(scoreArray)
-        
+        moveText.innerHTML = "O"
     }
     else{
         button.innerHTML = "O"
         let checkReturn = checkWinCondition(button.id, cellsY, "O", buttons, scoreArray, scoreboard)
         cellsY = checkReturn[0]
         scoreArray = checkReturn[1]
+        moveText.innerHTML = "X"
     }
     button.disabled = true
     console.log(moveCount)
 
     
-    return [moveCount,cellsX,cellsY, scoreArray]   
+    return [moveCount,cellsX,cellsY, scoreArray, moveText]   
 }
 
-function beginAction(buttons, beginButton){
+function beginAction(buttons, beginButton, moveText){
     moveCount = 0
     cellsX = []
     cellsY = []
+    moveText.innerHTML = "X"
     buttons.forEach(button => {
         button.disabled = false;
         button.innerHTML = ''
@@ -96,7 +99,7 @@ for(let i = 1; i <= 9; i++){
     button.innerHTML = gameNameLetters[i-1].toUpperCase();
     button.id = i
     button.addEventListener('click', function() { 
-        [moveCount,cellsX,cellsY, scoreArray] = cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard)
+        [moveCount,cellsX,cellsY, scoreArray] = cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard, moveText)
     })
 
     //styling
@@ -133,7 +136,7 @@ OScore.innerHTML = scoreArray[1]
 let beginButton = document.createElement("button")
 beginButton.innerHTML = "Begin game";
 
-beginButton.addEventListener("click", () => { beginAction(buttons, beginButton) })
+beginButton.addEventListener("click", () => { beginAction(buttons, beginButton, moveText) })
 
 menuContainer.appendChild(beginButton)
 
