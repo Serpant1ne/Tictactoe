@@ -15,7 +15,7 @@ function endGame(buttons, scoreArray, scoreboard){
     })
     scoreboard[0].innerHTML = scoreArray[0]
     scoreboard[1].innerHTML = scoreArray[1]
-    
+
 }
 
 function checkWinCondition(id, cellsArray, player, buttons, scoreArray, scoreboard){
@@ -140,5 +140,4 @@ beginButton.addEventListener("click", () => { beginAction(buttons, beginButton, 
 
 menuContainer.appendChild(beginButton)
 
-
-
+//there won't be any bot
