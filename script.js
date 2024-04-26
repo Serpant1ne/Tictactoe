@@ -1,22 +1,14 @@
+//get elements from DOM
 let gameContainer = document.getElementById("game");
 let menuContainer = document.getElementById("menu")
 let moveText = document.getElementById("move")
+
 //declaring storage variables
 let moveCount = 0
 let cellsX = []
 let cellsY = []
 let scoreArray = [0,0]
 let scoreboard = []
-
-
-function endGame(buttons, scoreArray, scoreboard){
-    buttons.forEach(button => {
-        button.disabled = true
-    })
-    scoreboard[0].innerHTML = scoreArray[0]
-    scoreboard[1].innerHTML = scoreArray[1]
-
-}
 
 function checkWinCondition(id, cellsArray, player, buttons, scoreArray, scoreboard){
     cellsArray.push(parseInt(id))
@@ -43,16 +35,18 @@ function checkWinCondition(id, cellsArray, player, buttons, scoreArray, scoreboa
                 scoreArray[1]++
             }
             
-            endGame(buttons, scoreArray, scoreboard)
+            buttons.forEach(button => {
+                button.disabled = true
+            })
+            scoreboard[0].innerHTML = scoreArray[0]
+            scoreboard[1].innerHTML = scoreArray[1]
             
         }
     });
-    console.log([cellsArray, scoreArray])
     return [cellsArray, scoreArray]
 }
 
 function cellAction(button, moveCount, cellsX, cellsY, buttons, scoreboard, moveText){
-    // function
     moveCount++
     if(moveCount == 9){
         console.log("Draw")
@@ -139,5 +133,3 @@ beginButton.classList.add("beginButton")
 beginButton.addEventListener("click", () => { beginAction(buttons, beginButton, moveText) })
 
 menuContainer.appendChild(beginButton)
-
-//there won't be any bot
